@@ -1,0 +1,98 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+    
+        <record id="bi_account_cheque_inherit_res_config_view" model="ir.ui.view">
+            <field name="name">bi.account.cheque.inherit.res.config.view</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//div[@id='recommended_apps']" position="after">
+                    <h2>Incoming Account</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="in_credit_account_id" class="col-md-3 o_light_label"/>
+                                            <field name="in_credit_account_id"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="in_debit_account_id" class="col-md-3 o_light_label"/>
+                                            <field name="in_debit_account_id"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    <h2>Outgoing Account</h2>
+                    <div class="row mt16 o_settings_container">
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="out_credit_account_id" class="col-md-3 o_light_label"/>
+                                            <field name="out_credit_account_id"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="out_debit_account_id" class="col-md-3 o_light_label"/>
+                                            <field name="out_debit_account_id"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    <h2>Account Cheque Configuration</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="deposite_account_id" class="col-md-3 o_light_label"/>
+                                            <field name="deposite_account_id"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="specific_journal_id" class="col-md-3 o_light_label"/>
+                                            <field name="specific_journal_id"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </xpath>
+
+            </field>
+        </record>
+        
+    </data>
+</odoo>

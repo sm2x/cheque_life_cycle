@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <data>
+     
+        <record id="cheque_transfered_wizard_wizard_view" model="ir.ui.view">
+			<field name="name">Cheque Transfered</field>
+			<field name="model">cheque.transfered.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Cheque Transfer">
+					<group>
+						<field name="transfered_date"/>
+						<field name="contact_id"/>
+					</group>
+					<footer>
+						<button string="Submit" name="create_ckeck_transfer_entry" class="oe_highlight" type="object"/>
+						or
+                        <button name="cancel" string="Cancel" class="oe_link"/> 
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="cheque_transfered_wizard_action" model="ir.actions.act_window">
+			<field name="name">Cheque Transfered Wizard</field>
+			<field name="res_model">cheque.transfered.wizard</field>
+			<field name="target">new</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+		
+        <record id="cheque_wizard_wizard_view" model="ir.ui.view">
+			<field name="name">Cheque Wizard</field>
+			<field name="model">cheque.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Cheque">
+					<group>
+						<field name="chequed_date"/>
+						<field name="is_outgoing" readonly='1' invisible="1"/>
+						<field name="bank_account_id" attrs="{'invisible': [('is_outgoing', '=',False)],'required':[('is_outgoing','=','True')]}"/>
+					</group>
+					<footer>
+						<button string="Submit" name="create_cheque_entry" class="oe_highlight" type="object"/>
+						or
+                        <button name="cancel" string="Cancel" class="oe_link"/> 
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="cheque_wizard_action" model="ir.actions.act_window">
+			<field name="name">Cheque</field>
+			<field name="res_model">cheque.wizard</field>
+			<field name="target">new</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+		
+        <record id="account_incoming_cheque_form_view" model="ir.ui.view">
+            <field name="name">account.incoming.cheque.form.view</field>
+            <field name="model">account.cheque</field>
+            <field name="arch" type="xml">
+                <form string="Incoming Cheque">
+                <header>
+                    <button name="set_to_submit" string="Submit" type="object" class="btn-primary" attrs="{'invisible': [('status1', 'in', ['registered','cashed','bounced','return','cancel','transfered','deposited'])]}"/>
+                    <button name="set_to_bounced" string="Bounced" type="object" class="btn-primary" attrs="{'invisible': [('status1', 'in', ['draft','bounced','return','cancel','transfered','deposited'])]}"/>
+                    <button name="set_to_return" string="Returned" type="object" class="btn-primary" attrs="{'invisible': [('status1', 'in', ['draft','return','cancel'])]}"/>
+                    <button name="set_to_reset" string="Set To Reset" type="object" class="btn-primary" attrs="{'invisible': [('status1', 'in', ['draft','cancel'])]}"/>
+                    <button name="set_to_deposite" string="Deposite" type="object" class="btn-primary" attrs="{'invisible': [('status1', 'in', ['draft','bounced','return','cancel','transfered','deposited'])]}"/> <!--attrs="{'invisible': [('account_cheque_type','=','incoming')]}"/>-->
+                    <!--button name="%(cheque_wizard_action)d" string="Cashed" type="action" class="btn-primary" attrs="{'invisible': [('status1', 'in', ['draft','cashed','bounced','return','cancel','transfered'])]}"/-->
+                    <button name="set_to_cancel" string="Cancel" type="object" class="btn-primary" attrs="{'invisible': [('status1', 'in', ['cancel'])]}"/>
+                    <field name="status1" widget="statusbar"/>
+                </header>
+                <sheet string=" Incoming Account Cheque">
+                    <div class="oe_button_box" name="button_box">
+                    	<button class="oe_stat_button" name="attachment_on_account_cheque"
+                            type="object" icon="fa-cloud-upload"
+                            attrs="{'invisible': [('attachment_count', '=', 0)]}">
+                            <field name="attachment_count" widget="statinfo" string="Attachment" />
+                        </button>
+                        <button type="object" name="action_view_jornal_items" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('journal_items_count', '=', 0)]}">
+                            <field name="journal_items_count" widget="statinfo" string="Journal Items" />
+                        </button>
+                        <button class="oe_stat_button" name="open_payment_matching_screen" string="Payment Matching" type="object"            icon="fa-university" attrs="{'invisible': [('status1', 'in', ['draft'])]}"/> 
+                    </div>
+                    <div class="oe_title oe_left">
+                        <h1>
+                            <field name="sequence"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <h1><field name="name"/></h1>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="bank_account_id"/>
+                            <field name="cheque_number"/>
+                            <field name="amount"/>
+                            <field name="account_cheque_type" readonly='1' invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="payee_user_id" string="Payer"/>
+                            <field name="cheque_date"/>
+                            <field name="cheque_receive_date" attrs="{'invisible': [('account_cheque_type', '=','outgoing')],'required':[('account_cheque_type','=','incoming')]}"/>
+                            <field name="cheque_return_date" attrs="{'invisible': [('status1', 'in',['draft','registered','cashed','bounced','cancel'])]}"/>
+                        </group>
+                    </group>
+                    <separator/>
+                    <group>
+                        <group>
+                            <field name="credit_account_id"/>
+                            <field name="journal_id" />
+                        </group>
+                        <group>
+                            <field name="debit_account_id"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Description">
+                            <field name="comment" placeholder="Add an internal note..."/>
+                        </page>
+                        <page string="Invoices">
+                            <field name="invoice_ids"/>
+                        </page>
+                        <page string="Attachments">
+                            <field name="attchment_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_incoming_cheque_tree_view" model="ir.ui.view">
+            <field name="name">account.incoming.cheque.tree.view</field>
+            <field name="model">account.cheque</field>
+            <field name="arch" type="xml">
+                <tree string="Incoming Account Cheque">
+                    <field name="name"/>
+                    <field name="payee_user_id" string="Payer"/>
+                    <field name="bank_account_id"/>
+                    <field name="cheque_number"/>
+                    <field name="amount"/>
+                    <field name="journal_id"/>
+                    <field name="cheque_date"/>
+                    <field name="cheque_return_date"/>
+                    <field name="status"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Outgoing View -->
+        
+        <record id="account_outgoing_cheque_form_view" model="ir.ui.view">
+            <field name="name">account.outgoing.cheque.form.view</field>
+            <field name="model">account.cheque</field>
+            <field name="arch" type="xml">
+                <form string="Outgoing Account Cheque">
+                <header>
+                    <button name="set_to_submit" string="Submit" type="object" class="btn-primary" attrs="{'invisible': [('status', 'in', ['registered','cashed','bounced','return','cancel','transfered','deposited'])]}"/>
+                    <!--button name="%(cheque_wizard_action)d" string="Cashed" type="action" class="btn-primary" attrs="{'invisible': [('status', 'in', ['draft','cashed','bounced','return','cancel','transfered','deposited'])]}"/-->
+                    <button name="set_to_bounced" string="Bounced" type="object" class="btn-primary" attrs="{'invisible': [('status', 'in', ['draft','bounced','return','cancel','transfered','deposited'])]}"/>
+                    <button name="set_to_return" string="Returned" type="object" class="btn-primary" attrs="{'invisible': [('status', 'in', ['draft','return','cancel','transfered','deposited'])]}"/>
+                    <button name="set_to_reset" string="Set To Reset" type="object" class="btn-primary" attrs="{'invisible': [('status', 'in', ['draft','registered','cancel','deposited','transfered','transfered','deposited'])]}"/>
+                    
+                    <button name="set_to_cancel" string="Cancel" type="object" class="btn-primary" attrs="{'invisible': [('status', 'in', ['cancel'])]}"/>
+                    
+                    <field name="status" widget="statusbar" />
+                </header>
+                <sheet string="Outgoing Account Cheque">
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="attachment_on_account_cheque"
+                            type="object" icon="fa-cloud-upload"
+                            attrs="{'invisible': [('attachment_count', '=', 0)]}">
+                            <field name="attachment_count" widget="statinfo" string="Attachment" />
+                        </button>
+                        <button type="object" name="action_view_jornal_items" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('journal_items_count', '=', 0)]}">
+                            <field name="journal_items_count" widget="statinfo" string="Journal Items" />
+                        </button>
+                        <button class="oe_stat_button" name="open_payment_matching_screen" string="Payment Matching" type="object"            icon="fa-university" s="btn-primary" attrs="{'invisible': [('status', 'in', ['draft'])]}"/> 
+                    </div>
+                    <div class="oe_title oe_left">
+                        <h1>
+                            <field name="sequence"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <h1><field name="name"/></h1>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="bank_account_id"/>
+                            <field name="cheque_number"/>
+                            <field name="amount"/>
+                            <field name="account_cheque_type" readonly='1' invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="payee_user_id" string="Payee"/>
+                            <field name="cheque_date"/>
+                            <field name="cheque_given_date" attrs="{'invisible': [('account_cheque_type', '=','incoming')],'required':[('account_cheque_type','=','outgoing')]}"/>
+                            <field name="cheque_receive_date" attrs="{'invisible': [('account_cheque_type', '=','outgoing')],'required':[('account_cheque_type','=','incoming')]}"/>
+                            <field name="cheque_return_date" attrs="{'invisible': [('status', 'in',['draft','registered','cashed','bounced','cancel'])]}"/>
+                        </group>
+                    </group>
+                    <separator/>
+                    <group>
+                        <group>
+                            <field name="credit_account_id"/>
+                            <field name="journal_id" />
+                        </group>
+                        <group>
+                            <field name="debit_account_id"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Description">
+                            <field name="comment" placeholder="Add an internal note..."/>
+                        </page>
+                        <page string="Invoices">
+                            <field name="invoice_ids"/>
+                        </page>
+                        <page string="Attachments">
+                            <field name="attchment_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_outgoing_cheque_tree_view" model="ir.ui.view">
+            <field name="name">account.outgoing.cheque.tree.view</field>
+            <field name="model">account.cheque</field>
+            <field name="arch" type="xml">
+                <tree string="Outgoing Account Cheque">
+                    <field name="name"/>
+                    <field name="payee_user_id"/>
+                    <field name="bank_account_id"/>
+                    <field name="cheque_number"/>
+                    <field name="amount"/>
+                    <field name="journal_id"/>
+                    <field name="cheque_date"/>
+                    <field name="cheque_return_date"/>
+                    <field name="status"/>
+                </tree>
+            </field>
+        </record>
+        <!-- End -->
+        
+        <record id="action_incoming_cheque" model="ir.actions.act_window">
+            <field name="name">Incoming Cheque</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.cheque</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="account_incoming_cheque_tree_view"/>
+            <field name="domain">[('account_cheque_type','=','incoming')]</field>
+            <field name="context">{'default_account_cheque_type': 'incoming'}</field>
+        </record>
+        
+        <record id="action_outgoing_cheque" model="ir.actions.act_window">
+            <field name="name">Outgoing Cheque</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.cheque</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="view_id" ref="account_outgoing_cheque_tree_view"/>-->
+            <field name="domain">[('account_cheque_type','=','outgoing')]</field>
+            <field name="context">{'default_account_cheque_type': 'outgoing'}</field>
+        </record>
+        
+        <record model="ir.actions.act_window.view" id="act_outgoing_view_form">
+            <field name="act_window_id" ref="action_outgoing_cheque"/>
+            <field name="sequence" eval="20"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account_outgoing_cheque_form_view"/>
+        </record>
+        
+        <record model="ir.actions.act_window.view" id="act_outgoing_view_tree">
+            <field name="act_window_id" ref="action_outgoing_cheque"/>
+            <field name="sequence" eval="10"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="account_outgoing_cheque_tree_view"/>
+        </record>
+        
+        
+        
+        <record model="ir.actions.act_window.view" id="act_incoming_view_form">
+            <field name="act_window_id" ref="action_incoming_cheque"/>
+            <field name="sequence" eval="20"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account_incoming_cheque_form_view"/>
+        </record>
+        
+        <record model="ir.actions.act_window.view" id="act_incoming_view_tree">
+            <field name="act_window_id" ref="action_incoming_cheque"/>
+            <field name="sequence" eval="10"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="account_incoming_cheque_tree_view"/>
+        </record>
+        
+        <record id="report_form_account_cheque" model="ir.ui.view">
+            <field name="name">report.form.account.cheque</field>
+            <field name="model">report.wizard</field>
+            <field name="arch" type="xml">
+				<form>
+					<group>
+						<field name="from_date"/>
+						<field name="to_date"/>
+					</group>
+					<group>
+						<field name="cheque_type"/>
+					</group>
+					<footer>
+					<button name="submit" string="Submit" type="object"/>
+					</footer>
+				</form>
+            </field>
+        </record>
+
+		<record id="action_report_wizard" model="ir.actions.act_window">
+            <field name="name">Account Cheque Report</field>
+            <field name="res_model">report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+           <field name="view_id" ref="report_form_account_cheque"/>
+           <field name="target">new</field>
+        </record>
+        
+        <menuitem id="menu_account_cheque" name="Cheque Management" parent="account.menu_finance" sequence="4"/>
+		<menuitem id="menu_sub_incoming_cheque" parent="menu_account_cheque" action="action_incoming_cheque" sequence="1"/>
+		<menuitem id="menu_sub_outgoing_cheque" parent="menu_account_cheque" action="action_outgoing_cheque" sequence="2"/>
+		
+		<menuitem id="menu_account_cheque_report" parent="account.menu_finance_reports" action="action_report_wizard" sequence="100"/>
+		
+    </data>
+</odoo>

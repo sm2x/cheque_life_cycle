@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <data>
+     
+     	<report id="account_cheque_report_id"
+				string="Account Cheque"
+				model="account.cheque"
+				report_type="qweb-pdf"
+				menu="False"
+				name="bi_account_cheque.account_cheque_template"
+				file="bi_account_cheque.account_cheque_template"
+				/>
+				
+     </data>
+</odoo>
