@@ -59,8 +59,8 @@
     post dated check managament
 
     """,
-    'author': 'BrowseInfo',
-    'website': 'www.browseinfo.in',
+    'author': 'Zero Systems',
+    'website': 'https://.erpzero.com',
     'depends': ['account','base','sale_management'],
     'data': [
             'security/ir.model.access.csv',
@@ -74,7 +74,7 @@
     'test': [],
     'installable': True,
     'auto_install': False,
-    "price": 89,
+    "price": 125,
     "currency": "EUR",
     'live_test_url':'https://youtu.be/RebVdk5DzIw',
     "images":['static/description/Banner.png'],
